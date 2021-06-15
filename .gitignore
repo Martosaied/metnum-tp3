@@ -1,0 +1,8 @@
+default-*
+data/test.csv
+data/train.csv
+
+pybind11/*
+build/*
+eigen/*
+tp3/*
