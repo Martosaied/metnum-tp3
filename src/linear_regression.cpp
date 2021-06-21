@@ -15,7 +15,7 @@ LinearRegression::LinearRegression()
 void LinearRegression::fit(Matrix X, Matrix y)
 {
     // Aplicar LDLT para ver si va mas rapido usando cholesovbksy
-    _solucion = (X.transpose() * X).ldlt().solve(X.transpose() * y);
+    _solucion = (X.transpose() * X).completeOrthogonalDecomposition().solve(X.transpose() * y);
 }
 
 
