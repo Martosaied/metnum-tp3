@@ -5,22 +5,26 @@ from sklearn.linear_model import LinearRegression
 from pandas.core.frame import DataFrame
 # from pandas.core.frame import DataFrame, DataFrameGroupBy
 import metnum
+import math
 
 
 class ModeloPrecioAbstract:
     def __init__(self, df, is_scikit=False):
         self.df: DataFrame = df
         self.df_predict: DataFrame = None
-        self.linear_regressor = metnum.LinearRegression if not is_scikit else LinearRegression
+        self.linear_regressor = metnum.LinearRegression() if not is_scikit else LinearRegression()
 
     def run(self, df_predict) -> DataFrame:
         """Ejecuta el modelo instanciado que implementa esta clase abstracta"""
         pass
 
+    def get_df(self):
+        return self.df
+
 
 class ModeloPrecioV1(ModeloPrecioAbstract):
-    def __init__(self, df):
-        super(ModeloPrecioV1, self).__init__(df)
+    def __init__(self, df, is_scikit=False):
+        super(ModeloPrecioV1, self).__init__(df, is_scikit)
         self.grupos: Dict[str, metnum.LinearRegression] = {}
         self.linear_regressor_segmentos: Dict[str,
                                               metnum.LinearRegression] = {}
@@ -40,7 +44,7 @@ class ModeloPrecioV1(ModeloPrecioAbstract):
         self.df_predict = self.segmentar(['tipodepropiedad', 'provincia'],
                                          self.df_predict)
 
-        df_predicted: DataFrame = self.predict(df)
+        df_predicted: DataFrame = self.predict()
         return df_predicted
 
     def clean(self, df, dropna=True):
@@ -90,7 +94,7 @@ class ModeloPrecioV1(ModeloPrecioAbstract):
             else:
                 self.grupos[tipop][ciudad] = self.fit(groupToSet)
 
-        return df
+        return dfGroupBy
 
     def feature_engeneering(self, df):
         df['buena zona'] = (df['centroscomercialescercanos'] > 0) & (
@@ -121,6 +125,12 @@ class ModeloPrecioV1(ModeloPrecioAbstract):
 
         return pd.concat(result).sort_index()
 
+    def get_df(self):
+        result = []
+        for name, group in self.df_predict:
+            result.append(group)
+
+        return pd.concat(result).sort_index()
 
 class ModeloPrecioMetrosCuadrados(ModeloPrecioAbstract):
     def run(self, df_predict) -> DataFrame:
@@ -130,17 +140,64 @@ class ModeloPrecioMetrosCuadrados(ModeloPrecioAbstract):
         return self.predict()
 
     def clean(self):
-        self.df = self.df[['metroscubiertos', 'metrostotales']]
+        self.df = self.df[['metroscubiertos', 'metrostotales','precio']]
         self.df = self.df.dropna()
-        self.df_predict = self.df_predict[['metroscubiertos', 'metrostotales']]
-        self.df_predict = self.df.dropna()
+        self.df_predict = self.df_predict[['metroscubiertos','metrostotales']]
+        self.df_predict = self.df_predict.dropna()
 
     def fit(self):
         X = self.df.drop('precio', axis=1).values
         y = self.df['precio'].values
+        y = y.reshape(len(y), 1)
         self.linear_regressor.fit(X, y)
 
     def predict(self):
         self.df_predict['precio'] = self.linear_regressor.predict(
             self.df_predict)
         return self.df_predict
+
+
+class ModeloPrecioMetrosCuadradosSeg(ModeloPrecioAbstract):
+    def run(self, df_predict, segmentos) -> DataFrame:
+        self.segmentos = segmentos
+        self.df_predict = df_predict
+        self.segmentar(segmentos)
+        return self.predict()
+
+    def segmentar(self, segmentos):
+        self.df_grouped = self.df.groupby(segmentos, dropna=False)
+        self.df_predict_grouped = self.df_predict.groupby(segmentos, dropna=False)
+        
+    def predict(self):
+        result = []
+        for name, group in self.df_predict_grouped:
+            fit_df = self.get_segment(name)
+
+            mp = ModeloPrecioMetrosCuadrados(fit_df)
+            df_predicted = mp.run(group)
+
+            result.append(df_predicted)
+        
+        self.df_predict = pd.concat(result).sort_index() 
+        return self.df_predict
+    
+    def get_segment(self, name):
+        segment_values = np.asarray(name)
+        try:
+            if not 'nan' in segment_values:
+                return self.df_grouped.get_group(name)
+
+            conditions = ''
+            for index, segmento in enumerate(self.segmentos):
+                if not str(segment_values[index]) == 'nan':
+                    conditions += f"{segmento} == '{segment_values[index]}' & "
+            
+            return self.df[self.df.eval(conditions[:-2])]
+        except:
+            return self.df
+
+
+    def get_df(self):
+        return self.df.loc[self.df_predict.index]
+
+        
