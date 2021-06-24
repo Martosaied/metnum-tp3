@@ -9,12 +9,13 @@ df = pd.read_csv('../../data/train.csv')
 
 modelos = {
     'v1': ModeloPrecio.ModeloPrecioV1,
+    'v2': ModeloPrecio.ModeloPrecioV2,
     'm2': ModeloPrecio.ModeloPrecioMetrosCuadrados,
     'm2_segmentado': ModeloPrecio.ModeloPrecioMetrosCuadradosSeg,
 }
 
-mp = modelos['m2_segmentado'](df)
-df_predicted = mp.run(df, ['tipodepropiedad','idzona' ,'antiguedad'])
+mp = modelos['v2'](df)
+df_predicted = mp.run(df, ['tipodepropiedad','provincia'])
 
 print(df_predicted["precio"])
 print(mp.get_df()["precio"])
