@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
 from pandas.core.frame import DataFrame
-# from pandas.core.frame import DataFrame, DataFrameGroupBy
+import utils
 import metnum
 import math
 
@@ -190,6 +190,8 @@ class ModeloPrecioV2(ModeloPrecioAbstract):
     def fit_model(self, gName, group):
         self.feature_engeneering(group)
         self.clean(group)
+        #covarianzasConPrecio = utils.covarianzas_con_precio(group.values)
+        #sinPrecio = utils.normalize_columns(group.drop('precio', axis=1).values) @ covarianzasConPrecio
         sinPrecio = group.drop('precio', axis=1).values
         precios = group['precio'].values.reshape(-1, 1)
         self.linear_regressor_segmentos[gName] = self.linear_regressor()
