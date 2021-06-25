@@ -5,4 +5,4 @@ def normalize_columns(X: np.ndarray) -> np.ndarray:
     return normalize(X, axis=0)
 
 def covarianzas_con_precio(X: np.ndarray) -> np.ndarray:
-    return np.cov(X)[:, -1][:-1]
+    return np.cov(X, rowvar = False)[:, -1][:-1]

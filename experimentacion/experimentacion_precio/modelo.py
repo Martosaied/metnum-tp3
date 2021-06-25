@@ -5,7 +5,7 @@ import ModeloPrecio
 from sklearn.metrics import mean_squared_error, mean_squared_log_error
 import metnum
 
-df = pd.read_csv('../../data/train.csv')
+df = pd.read_csv('../data/train.csv')
 
 modelos = {
     'v1': ModeloPrecio.ModeloPrecioV1,
@@ -17,8 +17,8 @@ modelos = {
 mp = modelos['v2'](df)
 df_predicted = mp.run(df, ['tipodepropiedad','provincia'])
 
-print(df_predicted["precio"])
-print(mp.get_df()["precio"])
+#print(df_predicted["precio"])
+#print(mp.get_df()["precio"])
 
 rms = mean_squared_error(mp.get_df()["precio"], df_predicted["precio"], squared=False)
 print(rms)

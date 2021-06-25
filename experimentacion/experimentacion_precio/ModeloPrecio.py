@@ -175,8 +175,10 @@ class ModeloPrecioV2(ModeloPrecioAbstract):
     def feature_engeneering(self, df: DataFrame):
         df['buena zona'] = (self.df['centroscomercialescercanos'] > 0) & (
             self.df['escuelascercanas'] > 0) & ('hospital' in self.df['descripcion'])
+        df['buena zona'] = df['buena zona'].astype(int)
         df['seguro'] = ('vigilancia' in self.df['descripcion']) | (
             'seguridad' in self.df['descripcion'])
+        df['seguro'] = df['seguro'].astype(int)
         # hacer feature engeneering para poder darle lat y lng a las props que no tienen
 
     def fit(self):
@@ -190,10 +192,11 @@ class ModeloPrecioV2(ModeloPrecioAbstract):
     def fit_model(self, gName, group):
         self.feature_engeneering(group)
         self.clean(group)
-        #covarianzasConPrecio = utils.covarianzas_con_precio(group.values)
-        #sinPrecio = utils.normalize_columns(group.drop('precio', axis=1).values) @ covarianzasConPrecio
-        sinPrecio = group.drop('precio', axis=1).values
-        precios = group['precio'].values.reshape(-1, 1)
+        covarianzasConPrecio = utils.covarianzas_con_precio(group.values)
+        normalizado = utils.normalize_columns(group.values)
+        sinPrecio = normalizado[:, :-1] @ covarianzasConPrecio
+        #sinPrecio = group.drop('precio', axis=1).values
+        precios = normalizado[:, -1].reshape(-1, 1)
         self.linear_regressor_segmentos[gName] = self.linear_regressor()
         self.linear_regressor_segmentos[gName].fit(sinPrecio, precios)
 
