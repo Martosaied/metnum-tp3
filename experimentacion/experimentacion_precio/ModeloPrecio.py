@@ -192,13 +192,13 @@ class ModeloPrecioV2(ModeloPrecioAbstract):
     def fit_model(self, gName, group):
         self.feature_engeneering(group)
         self.clean(group)
-        covarianzasConPrecio = utils.covarianzas_con_precio(group.values)
-        normalizado = utils.normalize_columns(group.values)
-        sinPrecio = normalizado[:, :-1] @ covarianzasConPrecio
-        #sinPrecio = group.drop('precio', axis=1).values
-        precios = normalizado[:, -1].reshape(-1, 1)
+        #covarianzasConPrecio = utils.covarianzas_con_precio(group.values)
+        #normalizado = utils.normalize_columns(group.values)
+        #sinPrecio = normalizado[:, :-1] @ covarianzasConPrecio
+        sinPrecio = group.drop('precio', axis=1).values
+        #precios = normalizado[:, -1].reshape(-1, 1)
         self.linear_regressor_segmentos[gName] = self.linear_regressor()
-        self.linear_regressor_segmentos[gName].fit(sinPrecio, precios)
+        self.linear_regressor_segmentos[gName].fit(sinPrecio, group['precio'].values.reshape(-1, 1))
 
     def predict(self, dfToPred: DataFrame):
         segmentedPred = dfToPred.groupby(self.segmentos, dropna=False)
