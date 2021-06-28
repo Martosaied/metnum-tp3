@@ -9,8 +9,9 @@ import math
 
 
 class ModeloPrecioAbstract:
-    def __init__(self, df, is_scikit=False):
+    def __init__(self, df, picked_columns, is_scikit=False):
         self.df: DataFrame = df
+        self.picked_columns = picked_columns
         self.df_predict: DataFrame = None
         self.linear_regressor = metnum.LinearRegression if not is_scikit else LinearRegression
 
@@ -247,9 +248,9 @@ class ModeloPrecioMetrosCuadrados(ModeloPrecioAbstract):
         return self.predict()
 
     def clean(self):
-        self.df = self.df[['metroscubiertos', 'metrostotales','precio']]
+        self.df = self.df[self.picked_columns + ['precio']]
         self.df = self.df.dropna()
-        self.df_predict = self.df_predict[['metroscubiertos','metrostotales']]
+        self.df_predict = self.df_predict[self.picked_columns]
         self.df_predict = self.df_predict.dropna()
 
     def fit(self):
@@ -260,8 +261,12 @@ class ModeloPrecioMetrosCuadrados(ModeloPrecioAbstract):
         self.linear_regressor_instance.fit(X, y)
 
     def predict(self):
-        self.df_predict['precio'] = self.linear_regressor_instance.predict(
-            self.df_predict)
+        response = self.df_predict.copy()
+        response['precio'] = self.linear_regressor_instance.predict(
+            response)
+        return response
+
+    def get_test_df(self):
         return self.df_predict
 
 
@@ -281,7 +286,7 @@ class ModeloPrecioMetrosCuadradosSeg(ModeloPrecioAbstract):
         for name, group in self.df_predict_grouped:
             fit_df = self.get_segment(name)
 
-            mp = ModeloPrecioMetrosCuadrados(fit_df)
+            mp = ModeloPrecioMetrosCuadrados(fit_df, self.picked_columns)
             df_predicted = mp.run(group)
 
             result.append(df_predicted)

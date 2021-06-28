@@ -1,0 +1,254 @@
+{
+    "banos": [
+        1762976.11,
+        0.455402488
+    ],
+    "habitaciones": [
+        2082648.07,
+        0.675280599
+    ],
+    "banos-habitaciones": [
+        1752171.19,
+        0.438030601
+    ],
+    "antiguedad": [
+        2802610.17,
+        54.8225533
+    ],
+    "banos-antiguedad": [
+        1728994.7,
+        0.462846851
+    ],
+    "habitaciones-antiguedad": [
+        2059329.62,
+        0.675795234
+    ],
+    "banos-habitaciones-antiguedad": [
+        1710870.43,
+        0.466085872
+    ],
+    "metroscubiertos": [
+        1609551.18,
+        0.351492371
+    ],
+    "banos-metroscubiertos": [
+        1542178.32,
+        0.348448721
+    ],
+    "habitaciones-metroscubiertos": [
+        1563657.3,
+        0.333735584
+    ],
+    "banos-habitaciones-metroscubiertos": [
+        1505304.69,
+        0.341554343
+    ],
+    "antiguedad-metroscubiertos": [
+        1558524.76,
+        0.335034519
+    ],
+    "banos-antiguedad-metroscubiertos": [
+        1506571.23,
+        0.340282944
+    ],
+    "habitaciones-antiguedad-metroscubiertos": [
+        1526047.13,
+        0.332850223
+    ],
+    "banos-habitaciones-antiguedad-metroscubiertos": [
+        1462377.23,
+        0.353825646
+    ],
+    "metrostotales": [
+        1758814.62,
+        0.483750324
+    ],
+    "banos-metrostotales": [
+        1559368.79,
+        0.413187048
+    ],
+    "habitaciones-metrostotales": [
+        1662468.76,
+        0.444064328
+    ],
+    "banos-habitaciones-metrostotales": [
+        1534224.19,
+        0.393864638
+    ],
+    "antiguedad-metrostotales": [
+        1697439.49,
+        0.464418293
+    ],
+    "banos-antiguedad-metrostotales": [
+        1535566.21,
+        0.415509823
+    ],
+    "habitaciones-antiguedad-metrostotales": [
+        1632126.79,
+        0.436567395
+    ],
+    "banos-habitaciones-antiguedad-metrostotales": [
+        1497340.64,
+        0.426625338
+    ],
+    "metroscubiertos-metrostotales": [
+        1457202.31,
+        0.334224019
+    ],
+    "banos-metroscubiertos-metrostotales": [
+        1415458.92,
+        0.332920553
+    ],
+    "habitaciones-metroscubiertos-metrostotales": [
+        1419861.58,
+        0.321336029
+    ],
+    "banos-habitaciones-metroscubiertos-metrostotales": [
+        1378477.83,
+        0.32572855
+    ],
+    "antiguedad-metroscubiertos-metrostotales": [
+        1426940.19,
+        0.326957994
+    ],
+    "banos-antiguedad-metroscubiertos-metrostotales": [
+        1393870.24,
+        0.330346693
+    ],
+    "habitaciones-antiguedad-metroscubiertos-metrostotales": [
+        1395669.35,
+        0.320687187
+    ],
+    "banos-habitaciones-antiguedad-metroscubiertos-metrostotales": [
+        1348007.57,
+        0.353621328
+    ],
+    "garages": [
+        1937944.34,
+        27.202612
+    ],
+    "banos-garages": [
+        1607512.36,
+        0.451274406
+    ],
+    "habitaciones-garages": [
+        1775523.28,
+        0.590871062
+    ],
+    "banos-habitaciones-garages": [
+        1583244.28,
+        0.536808105
+    ],
+    "antiguedad-garages": [
+        1857062.41,
+        9.27492935
+    ],
+    "banos-antiguedad-garages": [
+        1570171.83,
+        0.457342972
+    ],
+    "habitaciones-antiguedad-garages": [
+        1739062.82,
+        0.591836375
+    ],
+    "banos-habitaciones-antiguedad-garages": [
+        1534475.61,
+        0.641312346
+    ],
+    "metroscubiertos-garages": [
+        1510374.53,
+        0.369582244
+    ],
+    "banos-metroscubiertos-garages": [
+        1457872.18,
+        0.358260795
+    ],
+    "habitaciones-metroscubiertos-garages": [
+        1453436.83,
+        0.439675893
+    ],
+    "banos-habitaciones-metroscubiertos-garages": [
+        1410747.55,
+        0.599675015
+    ],
+    "antiguedad-metroscubiertos-garages": [
+        1457438.78,
+        0.354520411
+    ],
+    "banos-antiguedad-metroscubiertos-garages": [
+        1417689.5,
+        0.351791337
+    ],
+    "habitaciones-antiguedad-metroscubiertos-garages": [
+        1410497.86,
+        0.433367296
+    ],
+    "banos-habitaciones-antiguedad-metroscubiertos-garages": [
+        1362697.13,
+        0.620718223
+    ],
+    "metrostotales-garages": [
+        1578372.82,
+        0.468092051
+    ],
+    "banos-metrostotales-garages": [
+        1459410.23,
+        0.406126485
+    ],
+    "habitaciones-metrostotales-garages": [
+        1526044.83,
+        0.429473915
+    ],
+    "banos-habitaciones-metrostotales-garages": [
+        1428080.45,
+        0.448337089
+    ],
+    "antiguedad-metrostotales-garages": [
+        1539861.93,
+        0.461978513
+    ],
+    "banos-antiguedad-metrostotales-garages": [
+        1432505.24,
+        0.411466009
+    ],
+    "habitaciones-antiguedad-metrostotales-garages": [
+        1492597.5,
+        0.427839473
+    ],
+    "banos-habitaciones-antiguedad-metrostotales-garages": [
+        1387471.11,
+        0.523485059
+    ],
+    "metroscubiertos-metrostotales-garages": [
+        1386810.23,
+        0.343685366
+    ],
+    "banos-metroscubiertos-metrostotales-garages": [
+        1352228.35,
+        0.33736152
+    ],
+    "habitaciones-metroscubiertos-metrostotales-garages": [
+        1339406.55,
+        0.394394287
+    ],
+    "banos-habitaciones-metroscubiertos-metrostotales-garages": [
+        1308715.89,
+        0.446346362
+    ],
+    "antiguedad-metroscubiertos-metrostotales-garages": [
+        1353671.77,
+        0.338493952
+    ],
+    "banos-antiguedad-metroscubiertos-metrostotales-garages": [
+        1328053.04,
+        0.337384334
+    ],
+    "habitaciones-antiguedad-metroscubiertos-metrostotales-garages": [
+        1311015.05,
+        0.389481114
+    ],
+    "banos-habitaciones-antiguedad-metroscubiertos-metrostotales-garages": [
+        1274806.26,
+        0.518955613
+    ]
+}
