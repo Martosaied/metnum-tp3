@@ -34,6 +34,7 @@ class ModeloPrecioV1(ModeloPrecioAbstract):
             'banos', 'habitaciones', 'antiguedad', 'metroscubiertos',
             'metrostotales', 'garages'
         ]
+        self.covarianzas: Dict[str, ndarray] = {}
 
     def run(self, df):
         self.df_predict = df
@@ -195,8 +196,9 @@ class ModeloPrecioV2(ModeloPrecioAbstract):
         self.clean(group)
         covarianzasConPrecio = utils.covarianzas_con_precio(group.values)
         normalizado = utils.normalize_columns(group.values)
-        sinPrecio = normalizado[:, :-1] @ covarianzasConPrecio
-        #sinPrecio = group.drop('precio', axis=1).values
+        sinPrecio = normalizado[:, :-1] @ np.diag(covarianzasConPrecio)
+        self.covarianzas[gName] = covarianzasConPrecio
+        sinPrecio = group.drop('precio', axis=1).values
         precios = normalizado[:, -1].reshape(-1, 1)
         self.linear_regressor_segmentos[gName] = self.linear_regressor()
         self.linear_regressor_segmentos[gName].fit(sinPrecio, precios)
@@ -224,8 +226,12 @@ class ModeloPrecioV2(ModeloPrecioAbstract):
 
             self.feature_engeneering(group)
             self.clean(group, False)
+
+
             gName = gName if gName in self.linear_regressor_segmentos else math.nan
-            group["precio"] = self.linear_regressor_segmentos[gName].predict(group.values)
+            normalizado = utils.normalize_columns(grouped.values)
+            sinPrecio = normalizado[:, :-1] @ np.diag(self.covariazas[gName])
+            group["precio"] = self.linear_regressor_segmentos[gName].predict(sinPrecio)
             result.append(group)
 
         result = pd.concat(result).sort_index()
