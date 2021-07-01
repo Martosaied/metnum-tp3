@@ -135,15 +135,14 @@ class ModeloPrecioV1(ModeloPrecioAbstract):
         return pd.concat(result).sort_index()
 
 class ModeloPrecioV2(ModeloPrecioAbstract):
-    def __init__(self, df):
-        super(ModeloPrecioV2, self).__init__(df)
+    def __init__(self, df, picked_columns):
+        super(ModeloPrecioV2, self).__init__(df, picked_columns)
         self.clean_df = self.df.copy()
         self.grouped = None
         self.linear_regressor_segmentos: Dict[str,
                                               metnum.LinearRegression] = {}
 
-        self.columnas_piolas = ['banos', 'habitaciones', 'antiguedad',
-                                'metroscubiertos', 'metrostotales', 'garages']
+        self.columnas_piolas = picked_columns
     
     def run(self, df_predict, segmentos):
         self.segmentar(segmentos)
@@ -192,14 +191,16 @@ class ModeloPrecioV2(ModeloPrecioAbstract):
 
 
     def fit_model(self, gName, group):
-        self.feature_engeneering(group)
+        #self.feature_engeneering(group)
         self.clean(group)
-        covarianzasConPrecio = utils.covarianzas_con_precio(group.values)
-        normalizado = utils.normalize_columns(group.values)
-        sinPrecio = normalizado[:, :-1] @ np.diag(covarianzasConPrecio)
-        self.covarianzas[gName] = covarianzasConPrecio
-        sinPrecio = group.drop('precio', axis=1).values
-        precios = normalizado[:, -1].reshape(-1, 1)
+        #covarianzasConPrecio = utils.covarianzas_con_precio(group.values)
+        #normalizado = utils.normalize_columns(group.values)
+        #sinPrecio = normalizado[:, :-1] @ np.diag(covarianzasConPrecio)
+        #self.covarianzas[gName] = covarianzasConPrecio
+        #sinPrecio = group.drop('precio', axis=1).values
+        #precios = normalizado[:, -1].reshape(-1, 1)
+        sinPrecio = group[self.columnas_piolas].values
+        precios = group['precio'].values.reshape(-1, 1)
         self.linear_regressor_segmentos[gName] = self.linear_regressor()
         self.linear_regressor_segmentos[gName].fit(sinPrecio, precios)
 
@@ -224,13 +225,14 @@ class ModeloPrecioV2(ModeloPrecioAbstract):
 
                 gName = nameNoNAN
 
-            self.feature_engeneering(group)
+            #self.feature_engeneering(group)
             self.clean(group, False)
 
 
             gName = gName if gName in self.linear_regressor_segmentos else math.nan
-            normalizado = utils.normalize_columns(grouped.values)
-            sinPrecio = normalizado[:, :-1] @ np.diag(self.covariazas[gName])
+            #normalizado = utils.normalize_columns(grouped.values)
+            #sinPrecio = normalizado[:, :-1] @ np.diag(self.covariazas[gName])
+            sinPrecio = group[self.columnas_piolas].values
             group["precio"] = self.linear_regressor_segmentos[gName].predict(sinPrecio)
             result.append(group)
 
@@ -247,17 +249,24 @@ class ModeloPrecioV2(ModeloPrecioAbstract):
         return self.clean_df
 
 class ModeloPrecioMetrosCuadrados(ModeloPrecioAbstract):
-    def run(self, df_predict) -> DataFrame:
+
+    def run(self, df_predict, feature_engineering=False) -> DataFrame:
+        self.feature_engeneering_attrs = ['buena zona', 'seguro'] if feature_engineering else []
         self.df_predict = df_predict
+        if feature_engineering: self.feature_engeneering()
         self.clean()
         self.fit()
         return self.predict()
 
     def clean(self):
-        self.df = self.df[self.picked_columns + ['precio']]
-        self.df = self.df.dropna()
-        self.df_predict = self.df_predict[self.picked_columns]
-        self.df_predict = self.df_predict.dropna()
+        self.df = self.df[self.picked_columns + self.feature_engeneering_attrs + ['precio']]
+        self.df_predict = self.df_predict[self.picked_columns + self.feature_engeneering_attrs]
+        for columna in self.picked_columns:
+            mean = self.df[columna].mean()
+            mean_pr = self.df_predict[columna].mean()
+            mean = mean if not math.isnan(mean) else 0
+            self.df[columna].fillna(mean, inplace=True)
+            self.df_predict[columna].fillna(mean_pr, inplace=True)
 
     def fit(self):
         X = self.df.drop('precio', axis=1).values
@@ -271,6 +280,20 @@ class ModeloPrecioMetrosCuadrados(ModeloPrecioAbstract):
         response['precio'] = self.linear_regressor_instance.predict(
             response)
         return response
+
+    def feature_engeneering(self):
+        self.df['buena zona'] = (self.df['centroscomercialescercanos'] > 0) & (
+            self.df['escuelascercanas'] > 0) & ('hospital' in self.df['descripcion'])
+        self.df['buena zona'] = self.df['buena zona'].astype(int)
+        self.df['seguro'] = ('vigilancia' in self.df['descripcion']) | (
+            'seguridad' in self.df['descripcion'])
+        self.df['seguro'] = self.df['seguro'].astype(int)
+        self.df_predict['buena zona'] = (self.df_predict['centroscomercialescercanos'] > 0) & (
+            self.df_predict['escuelascercanas'] > 0) & ('hospital' in self.df_predict['descripcion'])
+        self.df_predict['buena zona'] = self.df_predict['buena zona'].astype(int)
+        self.df_predict['seguro'] = ('vigilancia' in self.df_predict['descripcion']) | (
+            'seguridad' in self.df_predict['descripcion'])
+        self.df_predict['seguro'] = self.df_predict['seguro'].astype(int)
 
     def get_test_df(self):
         return self.df_predict
