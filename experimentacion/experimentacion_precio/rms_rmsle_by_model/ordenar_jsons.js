@@ -6147,8 +6147,8 @@ entries1.sort((one, two) => one[1][1] - two[1][1]);
 entries2.sort((one, two) => two[1][2] - one[1][2]);
 entries3.sort((one, two) => one[1][3] - two[1][3]);
 console.log(JSON.stringify({
-    'RMSE': entries0.filter((elem, i) => i < 5), 
-    'RMSLE': entries1.filter((elem, i) => i < 5), 
-    'R2': entries2.filter((elem, i) => i < 5), 
-    'MAE': entries3.filter((elem, i) => i < 5), 
+    'RMSE': Object.fromEntries(entries0.filter((elem, i) => i < 5)), 
+    'RMSLE': Object.fromEntries(entries1.filter((elem, i) => i < 5)), 
+    'R2': Object.fromEntries(entries2.filter((elem, i) => i < 5)), 
+    'MAE': Object.fromEntries(entries3.filter((elem, i) => i < 5)), 
 }))

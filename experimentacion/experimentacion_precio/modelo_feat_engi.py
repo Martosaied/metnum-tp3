@@ -17,13 +17,9 @@ modelos = {
 
 KFOLD_K = 5
 kf = KFold(n_splits=KFOLD_K, shuffle=True)
-columnas_piolas = ["escuelascercanas","piscina","usosmultiples","banos","habitaciones","metroscubiertos"]
-
-segmentaciones = [['tipodepropiedad']]
-#segmentaciones = [['tipodepropiedad'],['tipodepropiedad', 'provincia'], ['piscina', 'usosmultiples'], ['tipodepropiedad','piscina', 'usosmultiples']]
 
 result = {}
-for segmentacion in segmentaciones:
+for name, tuple in [('seguro' , (True, False)), ('buena zona', (False, True)), ('seguro y buena zona', (True, True))]:
     rms = []
     rmsle = []
     mae = []
@@ -32,8 +28,8 @@ for segmentacion in segmentaciones:
     for train_index, test_index in kf.split(df):
         df_train, df_test = df.loc[train_index], df.loc[test_index]
         
-        mp = modelos['v2'](df_train, columnas_piolas)
-        df_predicted = mp.run(df_test, segmentacion)
+        mp = ModeloPrecio.ModeloPrecioV2FeatEng(df_train, tuple)
+        df_predicted = mp.run(df_test, ['tipodepropiedad'])
     
         
         df_predicted['precio'] = df_predicted['precio'].copy().apply(lambda x: x if x > 0 else 0) 
@@ -47,7 +43,7 @@ for segmentacion in segmentaciones:
     r2_result = np.sum(r2) / KFOLD_K 
     mae_result = np.sum(mae) / KFOLD_K
 
-    result[', '.join(segmentacion)] = [rms_result, rmsle_result, r2_result, mae_result]
+    result[name] = [rms_result, rmsle_result, r2_result, mae_result]
 
 
 out = pd.DataFrame.from_dict(result, orient='index', columns=['RMSE', 'RMSLE', 'R^2', 'MAE']).to_latex(column_format='p{6cm}|r|r|r|r')

@@ -143,6 +143,7 @@ class ModeloPrecioV2(ModeloPrecioAbstract):
                                               metnum.LinearRegression] = {}
 
         self.columnas_piolas = picked_columns
+        self.termino_independiente = False
     
     def run(self, df_predict, segmentos):
         self.segmentar(segmentos)
@@ -156,14 +157,10 @@ class ModeloPrecioV2(ModeloPrecioAbstract):
             mean = mean if not math.isnan(mean) else 0
             df[columna].fillna(mean, inplace=True)
 
+        df = df[self.columnas_piolas + ['precio']]
         if dropna:
             df.dropna(inplace=True)
 
-        df.drop(['id', 'titulo', 'descripcion', 'fecha', 'tipodepropiedad', 'direccion',
-                 'ciudad', 'provincia', 'idzona', 'lat', 'lng'], axis=1, inplace=True)
-
-        #negativos = df[df<0]
-        #df.drop(df[negativos].index, axis=0, inplace=True)
 
     def segmentar(self, segmentos):
         # idea: dividir la ciudad en norte y sur
@@ -174,13 +171,7 @@ class ModeloPrecioV2(ModeloPrecioAbstract):
         self.grouped = self.df.groupby(segmentos, dropna=False)
 
     def feature_engeneering(self, df: DataFrame):
-        df['buena zona'] = (self.df['centroscomercialescercanos'] > 0) & (
-            self.df['escuelascercanas'] > 0) & ('hospital' in self.df['descripcion'])
-        df['buena zona'] = df['buena zona'].astype(int)
-        df['seguro'] = ('vigilancia' in self.df['descripcion']) | (
-            'seguridad' in self.df['descripcion'])
-        df['seguro'] = df['seguro'].astype(int)
-        # hacer feature engeneering para poder darle lat y lng a las props que no tienen
+        return
 
     def fit(self):
         for gName, group in self.grouped:
@@ -191,7 +182,7 @@ class ModeloPrecioV2(ModeloPrecioAbstract):
 
 
     def fit_model(self, gName, group):
-        #self.feature_engeneering(group)
+        self.feature_engeneering(group)
         self.clean(group)
         #covarianzasConPrecio = utils.covarianzas_con_precio(group.values)
         #normalizado = utils.normalize_columns(group.values)
@@ -199,10 +190,10 @@ class ModeloPrecioV2(ModeloPrecioAbstract):
         #self.covarianzas[gName] = covarianzasConPrecio
         #sinPrecio = group.drop('precio', axis=1).values
         #precios = normalizado[:, -1].reshape(-1, 1)
-        sinPrecio = group[self.columnas_piolas].values
+        sinPrecio = np.c_[group[self.columnas_piolas].values, np.ones(group.values.shape[0])] if self.termino_independiente else group[self.columnas_piolas].values
         precios = group['precio'].values.reshape(-1, 1)
         self.linear_regressor_segmentos[gName] = self.linear_regressor()
-        self.linear_regressor_segmentos[gName].fit(sinPrecio, precios)
+        self.linear_regressor_segmentos[gName].fit(sinPrecio , precios)
 
     def predict(self, dfToPred: DataFrame):
         segmentedPred = dfToPred.groupby(self.segmentos, dropna=False)
@@ -225,14 +216,14 @@ class ModeloPrecioV2(ModeloPrecioAbstract):
 
                 gName = nameNoNAN
 
-            #self.feature_engeneering(group)
+            self.feature_engeneering(group)
             self.clean(group, False)
 
 
             gName = gName if gName in self.linear_regressor_segmentos else math.nan
             #normalizado = utils.normalize_columns(grouped.values)
             #sinPrecio = normalizado[:, :-1] @ np.diag(self.covariazas[gName])
-            sinPrecio = group[self.columnas_piolas].values
+            sinPrecio = np.c_[group[self.columnas_piolas].values, np.ones(group.values.shape[0])] if self.termino_independiente else group[self.columnas_piolas].values
             group["precio"] = self.linear_regressor_segmentos[gName].predict(sinPrecio)
             result.append(group)
 
@@ -316,7 +307,7 @@ class ModeloPrecioMetrosCuadradosSeg(ModeloPrecioAbstract):
             fit_df = self.get_segment(name)
 
             mp = ModeloPrecioMetrosCuadrados(fit_df, self.picked_columns)
-            df_predicted = mp.run(group)
+            df_predicted = mp.run(group, feature_engineering=True)
 
             result.append(df_predicted)
         
@@ -341,3 +332,22 @@ class ModeloPrecioMetrosCuadradosSeg(ModeloPrecioAbstract):
 
     def get_df(self):
         return self.df.loc[self.df_predict.index]
+
+class ModeloPrecioV2FeatEng(ModeloPrecioV2):
+    def __init__(self, df, seguro_buenaZona):
+        self.seguro, self.buenaZona = seguro_buenaZona
+        piolas = ["escuelascercanas","piscina","usosmultiples","banos","habitaciones","metroscubiertos"]
+        if self.seguro:
+            piolas.append('seguro')
+        if self.buenaZona:
+            piolas.append('buena zona')
+        super(ModeloPrecioV2FeatEng, self).__init__(df, piolas)
+
+
+    def feature_engeneering(self, df: DataFrame):
+        if self.buenaZona:
+            df['buena zona'] = (self.df['centroscomercialescercanos'] > 0) & (
+                self.df['escuelascercanas'] > 0) & ('hospital' in self.df['descripcion'])
+        if self.seguro:
+            df['seguro'] = ('vigilancia' in self.df['descripcion']) | (
+                'seguridad' in self.df['descripcion'])
