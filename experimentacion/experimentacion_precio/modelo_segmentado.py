@@ -20,9 +20,10 @@ KFOLD_K = 5
 kf = KFold(n_splits=KFOLD_K, shuffle=True)
 accuracies_by_split = 0
 
-columnas_piolas = ["garages", "banos","habitaciones","antiguedad","metroscubiertos","metrostotales"]
+#columnas_piolas = ["banos", "habitaciones", "metroscubiertos"]
+columnas_piolas =["banos","habitaciones","antiguedad","metroscubiertos","metrostotales"]
 
-segmentaciones = [['tipodepropiedad']]
+segmentaciones = [['tipodepropiedad'], ['tipodepropiedad', 'provincia'], ['tipodepropiedad', 'ciudad'], ['tipodepropiedad', 'provincia', 'ciudad']]
 
 result = {}
 for segmentacion in segmentaciones:
@@ -34,7 +35,7 @@ for segmentacion in segmentaciones:
     for train_index, test_index in kf.split(df):
         df_train, df_test = df.loc[train_index], df.loc[test_index]
         
-        mp = modelos['v2'](df_train, columnas_piolas)
+        mp = modelos['m2_segmentado'](df_train, columnas_piolas)
         df_predicted = mp.run(df_test, segmentacion)
     
         
@@ -49,6 +50,7 @@ for segmentacion in segmentaciones:
     r2_result = np.sum(r2) / KFOLD_K 
     mae_result = np.sum(mae) / KFOLD_K 
 
-    result['-'.join(segmentacion)] = np.array([rms_result, rmsle_result, r2_result, mae_result])
+    result[', '.join(segmentacion)] = [rms_result, rmsle_result, r2_result, mae_result]
 
-print(result)
+
+print(pd.DataFrame.from_dict(result, orient='index', columns=['RMSE', 'RMSLE', '$R^2$', 'MAE']).to_latex())
