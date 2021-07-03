@@ -20,7 +20,7 @@ KFOLD_K = 5
 kf = KFold(n_splits=KFOLD_K, shuffle=True)
 accuracies_by_split = 0
 
-columnas_piolas = ['banos', 'habitaciones', 'antiguedad', 'metroscubiertos',
+columnas_piolas = ['centroscomercialescercanos','escuelascercanas','piscina','usosmultiples','banos', 'habitaciones', 'antiguedad', 'metroscubiertos',
             'metrostotales', 'garages']
 
 def powerset(s):

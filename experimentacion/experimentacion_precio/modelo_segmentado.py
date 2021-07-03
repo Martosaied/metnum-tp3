@@ -20,10 +20,10 @@ KFOLD_K = 5
 kf = KFold(n_splits=KFOLD_K, shuffle=True)
 accuracies_by_split = 0
 
-#columnas_piolas = ["banos", "habitaciones", "metroscubiertos"]
-columnas_piolas =["banos","habitaciones","antiguedad","metroscubiertos","metrostotales"]
+columnas_piolas = ["escuelascercanas","piscina","usosmultiples","banos","habitaciones","metroscubiertos"]
+#columnas_piolas =["banos","habitaciones","antiguedad","metroscubiertos","metrostotales"]
 
-segmentaciones = [['tipodepropiedad'], ['tipodepropiedad', 'provincia'], ['tipodepropiedad', 'ciudad'], ['tipodepropiedad', 'provincia', 'ciudad']]
+segmentaciones = [['tipodepropiedad'], ['piscina', 'usosmultiples']]
 
 result = {}
 for segmentacion in segmentaciones:
@@ -48,7 +48,7 @@ for segmentacion in segmentaciones:
     rms_result = np.sum(rms) / KFOLD_K 
     rmsle_result = np.sum(rmsle) / KFOLD_K 
     r2_result = np.sum(r2) / KFOLD_K 
-    mae_result = np.sum(mae) / KFOLD_K 
+    mae_result = np.sum(mae) / KFOLD_K
 
     result[', '.join(segmentacion)] = [rms_result, rmsle_result, r2_result, mae_result]
 
