@@ -9,8 +9,7 @@ from pathlib import Path
 df = pd.read_csv('../../data/train.csv')
 
 modelos = {
-    'v1': ModeloPrecio.ModeloPrecioV1,
-    'v2': ModeloPrecio.ModeloPrecioV2,
+    'v2': ModeloPrecio.SegmentadoV2,
     'm2': ModeloPrecio.ModeloPrecioMetrosCuadrados,
     'm2_segmentado': ModeloPrecio.ModeloPrecioMetrosCuadradosSeg,
 }
@@ -52,6 +51,3 @@ for segmentacion in segmentaciones:
 
 out = pd.DataFrame.from_dict(result, orient='index', columns=['RMSE', 'RMSLE', 'R^2', 'MAE']).to_latex(column_format='p{6cm}|r|r|r|r')
 print(out)
-""" with open(f'otros_resultados_segmentacion_v2.txt', 'w') as f:
-        with pd.option_context("max_colwidth", 1000):
-            f.write(out) """

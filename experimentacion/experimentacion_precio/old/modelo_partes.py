@@ -10,8 +10,7 @@ import json
 df = pd.read_csv('../../data/train.csv')
 
 modelos = {
-    'v1': ModeloPrecio.ModeloPrecioV1,
-    'v2': ModeloPrecio.ModeloPrecioV2,
+    'v2': ModeloPrecio.SegmentadoV2,
     'm2': ModeloPrecio.ModeloPrecioMetrosCuadrados,
     'm2_segmentado': ModeloPrecio.ModeloPrecioMetrosCuadradosSeg,
 }

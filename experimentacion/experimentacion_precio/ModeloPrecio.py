@@ -21,9 +21,9 @@ class ModeloPrecioAbstract:
     def get_df(self):
         return self.df
 
-class ModeloPrecioV2(ModeloPrecioAbstract):
+class SegmentadoV2(ModeloPrecioAbstract):
     def __init__(self, df, picked_columns):
-        super(ModeloPrecioV2, self).__init__(df, picked_columns)
+        super(SegmentadoV2, self).__init__(df, picked_columns)
         self.clean_df = self.df.copy()
         self.grouped = None
         self.linear_regressor_segmentos: Dict[str,
