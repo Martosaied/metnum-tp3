@@ -32,14 +32,11 @@ class ModeloBano(ModeloBanoAbstract):
 
     def clean(self):
         self.df = self.df[self.picked_columns + ['banos']]
-        self.df_predict = self.df_predict[self.picked_columns]
-        for columna in self.picked_columns:
-            mean = round(self.df[columna].mean())
-            mean_pr = round(self.df_predict[columna].mean())
-            print(mean)
-            mean = mean if not math.isnan(mean) else 0
-            self.df[columna].fillna(mean, inplace=True)
-            self.df_predict[columna].fillna(mean_pr, inplace=True)
+        self.df_predict = self.df_predict[self.picked_columns + ['banos']]
+        for columna in self.picked_columns + ['banos']:
+            self.df[columna].fillna(2, inplace=True)
+            if not columna == 'banos':
+                self.df_predict[columna].fillna(2, inplace=True)
 
     def fit(self):
         X = self.df.drop('banos', axis=1).values
@@ -81,9 +78,8 @@ class ModeloBanoSeg(ModeloBanoAbstract):
             df_predicted = mp.run(group)
 
             result.append(df_predicted)
-        
         self.df_predict = pd.concat(result).sort_index() 
-        return self.df_predict['banos'].apply(round)
+        return self.df_predict['banos'].fillna(2).apply(round)
     
     def get_segment(self, name):
         segment_values = np.asarray(name)
@@ -103,3 +99,99 @@ class ModeloBanoSeg(ModeloBanoAbstract):
 
     def get_df(self):
         return self.df.loc[self.df_predict.index]
+
+
+class ModeloV2(ModeloBanoAbstract):
+    def __init__(self, df, picked_columns):
+        super(ModeloV2, self).__init__(df, picked_columns)
+        self.clean_df = self.df.copy()
+        self.grouped = None
+        self.linear_regressor_segmentos: Dict[str,
+                                              metnum.LinearRegression] = {}
+
+        self.columnas_piolas = picked_columns
+        self.termino_independiente = False
+    
+    def run(self, df_predict, segmentos):
+        self.segmentar(segmentos)
+        self.fit()
+        return self.predict(df_predict)
+
+    def clean(self, df: DataFrame, dropna=True):
+
+        for columna in self.columnas_piolas:
+            mean = df[columna].mean()
+            mean = mean if not math.isnan(mean) else 0
+            df[columna].fillna(mean, inplace=True)
+
+        df = df[self.columnas_piolas + ['banos']]
+        if dropna:
+            df.dropna(inplace=True)
+
+
+    def segmentar(self, segmentos):
+        # idea: dividir la ciudad en norte y sur
+        # idea: en vez de segmentar a priori con categorias fijas, usar las propiedades mas cercanas en cuando a lat y lng para entrenar el modelo
+        # lat y lng son datos que solo tiene la mitad del dataset. podemos quizas tomarlo en cuenta en el modelo con un peso que haga que influya pero poco
+        # agrupar los tipos de propiedades similares que tienen pocas instancias??
+        self.segmentos = segmentos
+        self.grouped = self.df.groupby(segmentos, dropna=False)
+
+    def feature_engeneering(self, df: DataFrame):
+        return
+
+    def fit(self):
+        for gName, group in self.grouped:
+            self.fit_model(gName, group)
+
+        # precalculo el modelo que tiene a todas las instancias
+        self.fit_model(math.nan, self.df.copy(deep=True))
+
+
+    def fit_model(self, gName, group):
+        self.clean(group)
+        banos = np.c_[group[self.columnas_piolas].values, np.ones(group.values.shape[0])] if self.termino_independiente else group[self.columnas_piolas].values
+        banoss = group['banos'].values.reshape(-1, 1)
+        self.linear_regressor_segmentos[gName] = self.linear_regressor()
+        self.linear_regressor_segmentos[gName].fit(banos , banoss)
+
+    def predict(self, dfToPred: DataFrame):
+        segmentedPred = dfToPred.groupby(self.segmentos, dropna=False)
+        result = []
+        for gName, group in segmentedPred:
+            if type(gName) is tuple and self.contieneNaN(gName):
+
+                nameNoNAN = tuple([x for x in gName if type(x) is str])
+
+                nameNoNAN = math.nan if len(nameNoNAN) == 0 else nameNoNAN
+
+                if not nameNoNAN in self.linear_regressor_segmentos:
+                    categoriasNoNaN = [self.segmentos[i] for i, x in enumerate(gName) if type(x) is str]
+                    newGrouped = self.df.groupby(categoriasNoNaN)
+                    
+                    for gName2, group2 in newGrouped:  # esto es fittear adentro de predict, sorry not sorry
+
+                        gName2 = (gName2,) if type(gName2) is str else gName2 # (que vergaaaa)
+                        self.fit_model(gName2, group2)
+
+                gName = nameNoNAN
+
+            self.clean(group, False)
+
+
+            gName = gName if gName in self.linear_regressor_segmentos else math.nan
+            banos = np.c_[group[self.columnas_piolas].values, np.ones(group.values.shape[0])] if self.termino_independiente else group[self.columnas_piolas].values
+            group["banos"] = self.linear_regressor_segmentos[gName].predict(banos)
+            result.append(group)
+
+        result = pd.concat(result).sort_index()
+        return result
+
+    def contieneNaN(self, tupla: Tuple):
+        for elem in tupla:
+            if (not type(elem) is str) and math.isnan(elem):
+                return True
+        return False
+
+    def get_df(self):
+        return self.clean_df

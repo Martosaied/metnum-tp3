@@ -18,7 +18,7 @@ KFOLD_K = 5
 kf = KFold(n_splits=KFOLD_K, shuffle=True)
 accuracies_by_split = 0
 
-columnas_piolas = ['centroscomercialescercanos','escuelascercanas','piscina','usosmultiples','precio', 'habitaciones', 'antiguedad', 'metroscubiertos',
+columnas_utilizadas = ['centroscomercialescercanos','escuelascercanas','piscina','usosmultiples','precio', 'habitaciones', 'antiguedad', 'metroscubiertos',
             'metrostotales', 'garages']
 
 def powerset(s):
@@ -29,8 +29,7 @@ def powerset(s):
     return conjunto_de_partes
 
 result = {}
-print(powerset(columnas_piolas))
-for picked_columns in powerset(columnas_piolas):
+for picked_columns in powerset(columnas_utilizadas):
     rms = []
     rmsle = []
     mae = []
@@ -43,7 +42,7 @@ for picked_columns in powerset(columnas_piolas):
         df_train, df_test = df.loc[train_index], df.loc[test_index]
         
         mp = modelos['m'](df_train, picked_columns)
-        df_predicted = mp.run(df_test)#, ['tipodepropiedad','provincia'])
+        df_predicted = mp.run(df_test)
         
         df_predicted['banos'] = df_predicted['banos'].copy().apply(lambda x: x if x > 0 else 0) 
         rms.append(mean_squared_error(df_test["banos"], df_predicted["banos"], squared=False))

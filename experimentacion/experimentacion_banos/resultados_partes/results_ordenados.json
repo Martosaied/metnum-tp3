@@ -1,0 +1,130 @@
+{
+    "RMSE": {
+        "centroscomercialescercanos-escuelascercanas-piscina-usosmultiples-precio-habitaciones-antiguedad-metroscubiertos-metrostotales-garages": [
+            0.6216888,
+            0.03818416,
+            0.53585792,
+            0.47657603
+        ],
+        "escuelascercanas-piscina-usosmultiples-precio-habitaciones-antiguedad-metroscubiertos-metrostotales-garages": [
+            0.62170495,
+            0.0381832,
+            0.53582126,
+            0.47659506
+        ],
+        "centroscomercialescercanos-piscina-usosmultiples-precio-habitaciones-antiguedad-metroscubiertos-metrostotales-garages": [
+            0.62177826,
+            0.0381937,
+            0.53573213,
+            0.47670065
+        ],
+        "centroscomercialescercanos-escuelascercanas-piscina-precio-habitaciones-antiguedad-metroscubiertos-metrostotales-garages": [
+            0.62188612,
+            0.03821502,
+            0.53556202,
+            0.47677811
+        ],
+        "escuelascercanas-piscina-precio-habitaciones-antiguedad-metroscubiertos-metrostotales-garages": [
+            0.62190676,
+            0.03821618,
+            0.53549653,
+            0.47680215
+        ]
+    },
+    "RMSLE": {
+        "escuelascercanas-piscina-usosmultiples-precio-habitaciones-antiguedad-metroscubiertos-metrostotales-garages": [
+            0.62170495,
+            0.0381832,
+            0.53582126,
+            0.47659506
+        ],
+        "centroscomercialescercanos-escuelascercanas-piscina-usosmultiples-precio-habitaciones-antiguedad-metroscubiertos-metrostotales-garages": [
+            0.6216888,
+            0.03818416,
+            0.53585792,
+            0.47657603
+        ],
+        "centroscomercialescercanos-piscina-usosmultiples-precio-habitaciones-antiguedad-metroscubiertos-metrostotales-garages": [
+            0.62177826,
+            0.0381937,
+            0.53573213,
+            0.47670065
+        ],
+        "piscina-usosmultiples-precio-habitaciones-antiguedad-metroscubiertos-metrostotales-garages": [
+            0.62195445,
+            0.03820258,
+            0.53545318,
+            0.47715225
+        ],
+        "centroscomercialescercanos-escuelascercanas-piscina-precio-habitaciones-antiguedad-metroscubiertos-metrostotales-garages": [
+            0.62188612,
+            0.03821502,
+            0.53556202,
+            0.47677811
+        ]
+    },
+    "R2": {
+        "centroscomercialescercanos-escuelascercanas-piscina-usosmultiples-precio-habitaciones-antiguedad-metroscubiertos-metrostotales-garages": [
+            0.6216888,
+            0.03818416,
+            0.53585792,
+            0.47657603
+        ],
+        "escuelascercanas-piscina-usosmultiples-precio-habitaciones-antiguedad-metroscubiertos-metrostotales-garages": [
+            0.62170495,
+            0.0381832,
+            0.53582126,
+            0.47659506
+        ],
+        "centroscomercialescercanos-piscina-usosmultiples-precio-habitaciones-antiguedad-metroscubiertos-metrostotales-garages": [
+            0.62177826,
+            0.0381937,
+            0.53573213,
+            0.47670065
+        ],
+        "centroscomercialescercanos-escuelascercanas-piscina-precio-habitaciones-antiguedad-metroscubiertos-metrostotales-garages": [
+            0.62188612,
+            0.03821502,
+            0.53556202,
+            0.47677811
+        ],
+        "escuelascercanas-piscina-precio-habitaciones-antiguedad-metroscubiertos-metrostotales-garages": [
+            0.62190676,
+            0.03821618,
+            0.53549653,
+            0.47680215
+        ]
+    },
+    "MAE": {
+        "centroscomercialescercanos-escuelascercanas-piscina-usosmultiples-precio-habitaciones-antiguedad-metroscubiertos-metrostotales-garages": [
+            0.6216888,
+            0.03818416,
+            0.53585792,
+            0.47657603
+        ],
+        "escuelascercanas-piscina-usosmultiples-precio-habitaciones-antiguedad-metroscubiertos-metrostotales-garages": [
+            0.62170495,
+            0.0381832,
+            0.53582126,
+            0.47659506
+        ],
+        "centroscomercialescercanos-piscina-usosmultiples-precio-habitaciones-antiguedad-metroscubiertos-metrostotales-garages": [
+            0.62177826,
+            0.0381937,
+            0.53573213,
+            0.47670065
+        ],
+        "centroscomercialescercanos-escuelascercanas-piscina-precio-habitaciones-antiguedad-metroscubiertos-metrostotales-garages": [
+            0.62188612,
+            0.03821502,
+            0.53556202,
+            0.47677811
+        ],
+        "escuelascercanas-piscina-precio-habitaciones-antiguedad-metroscubiertos-metrostotales-garages": [
+            0.62190676,
+            0.03821618,
+            0.53549653,
+            0.47680215
+        ]
+    }
+}
