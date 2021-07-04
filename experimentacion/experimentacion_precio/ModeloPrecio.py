@@ -22,118 +22,6 @@ class ModeloPrecioAbstract:
     def get_df(self):
         return self.df
 
-
-class ModeloPrecioV1(ModeloPrecioAbstract):
-    def __init__(self, df, is_scikit=False):
-        super(ModeloPrecioV1, self).__init__(df, is_scikit)
-        self.grupos: Dict[str, metnum.LinearRegression] = {}
-        self.linear_regressor_segmentos: Dict[str,
-                                              metnum.LinearRegression] = {}
-
-        self.columnas_piolas = [
-            'banos', 'habitaciones', 'antiguedad', 'metroscubiertos',
-            'metrostotales', 'garages'
-        ]
-        self.covarianzas: Dict[str, ndarray] = {}
-
-    def run(self, df):
-        self.df_predict = df
-
-        self.df_predict = self.feature_engeneering(self.df_predict)
-        self.df = self.feature_engeneering(self.df)
-
-        self.df = self.segmentar(['tipodepropiedad', 'provincia'], self.df)
-        self.df_predict = self.segmentar(['tipodepropiedad', 'provincia'],
-                                         self.df_predict)
-
-        df_predicted: DataFrame = self.predict()
-        return df_predicted
-
-    def clean(self, df, dropna=True):
-
-        for columna in self.columnas_piolas:
-            mean = df[columna].mean()
-            mean = mean if not np.isnan(mean) else 0
-            df[columna].fillna(mean, inplace=True)
-
-        if dropna:
-            df.dropna(inplace=True)
-
-        df.drop([
-            'id', 'titulo', 'descripcion', 'fecha', 'tipodepropiedad',
-            'direccion', 'ciudad', 'provincia', 'idzona', 'lat', 'lng'
-        ],
-                axis=1,
-                inplace=True)
-
-    def segmentar(self, segmentos, df):
-        # idea: dividir la ciudad en norte y sur
-        # idea: en vez de segmentar a priori con categorias fijas, usar las propiedades mas cercanas en cuando a lat y lng para entrenar el modelo
-        # lat y lng son datos que solo tiene la mitad del dataset. podemos quizas tomarlo en cuenta en el modelo con un peso que haga que influya pero poco
-        # agrupar los tipos de propiedades similares que tienen pocas instancias??
-
-        self.segmentos = segmentos
-        dfGroupBy = df.groupby(segmentos, dropna=False)
-        dfGroupByCiudad = df.groupby(segmentos[1], dropna=False)
-        dfGroupByTipop = df.groupby(segmentos[0], dropna=False)
-
-        for name, group in dfGroupBy:
-            (tipop, ciudad) = name
-            tipop = str(tipop)
-            ciudad = str(ciudad)
-            groupToSet = None
-            if tipop == 'nan' and ciudad == 'nan':
-                groupToSet = df.copy()  # corregir esto
-            elif tipop == 'nan':
-                groupToSet = dfGroupByCiudad.get_group(ciudad)
-            elif ciudad == 'nan':
-                groupToSet = dfGroupByTipop.get_group(tipop)
-            else:
-                groupToSet = group
-
-            if not tipop in self.grupos:
-                self.grupos[tipop] = {ciudad: self.fit(groupToSet)}
-            else:
-                self.grupos[tipop][ciudad] = self.fit(groupToSet)
-
-        return dfGroupBy
-
-    def feature_engeneering(self, df):
-        df['buena zona'] = (df['centroscomercialescercanos'] > 0) & (
-            df['escuelascercanas'] > 0) & ('hospital' in df['descripcion'])
-        df['seguro'] = ('vigilancia' in df['descripcion']) | (
-            'seguridad' in df['descripcion'])
-        return df
-        # hacer feature engeneering para poder darle lat y lng a las props que no tienen
-
-    def fit(self, group):
-        self.clean(group)
-        sinPrecio = group.drop(['precio'], axis=1).values
-        precios = group['precio'].values.reshape(-1, 1)
-        linear_regressor = self.linear_regressor()
-        linear_regressor.fit(sinPrecio, precios)
-        return linear_regressor
-
-    def predict(self):
-        result = []
-        for name, group in self.df_predict:
-            (tipop, ciudad) = name
-            tipop = str(tipop)
-            ciudad = str(ciudad)
-            self.clean(group, False)
-            group["precio"] = self.grupos[tipop][ciudad].predict(group.values)
-
-            result.append(group)
-
-        return pd.concat(result).sort_index()
-
-    def get_df(self):
-        result = []
-        for name, group in self.df_predict:
-            result.append(group)
-
-        return pd.concat(result).sort_index()
-
 class ModeloPrecioV2(ModeloPrecioAbstract):
     def __init__(self, df, picked_columns):
         super(ModeloPrecioV2, self).__init__(df, picked_columns)
@@ -239,7 +127,7 @@ class ModeloPrecioV2(ModeloPrecioAbstract):
     def get_df(self):
         return self.clean_df
 
-class ModeloPrecioMetrosCuadrados(ModeloPrecioAbstract):
+class SinSegmentar(ModeloPrecioAbstract):
 
     def run(self, df_predict, feature_engineering=False) -> DataFrame:
         self.feature_engeneering_attrs = ['buena zona', 'seguro'] if feature_engineering else []
@@ -290,7 +178,7 @@ class ModeloPrecioMetrosCuadrados(ModeloPrecioAbstract):
         return self.df_predict
 
 
-class ModeloPrecioMetrosCuadradosSeg(ModeloPrecioAbstract):
+class Segmentado(ModeloPrecioAbstract):
     def run(self, df_predict, segmentos) -> DataFrame:
         self.segmentos = segmentos
         self.df_predict = df_predict

@@ -6,3 +6,6 @@ pybind11/*
 build/*
 eigen/*
 tp3/*
+
+*.pyc
+*-gnu.so
