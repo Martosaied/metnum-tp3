@@ -3,7 +3,6 @@ import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
 from pandas.core.frame import DataFrame
-import utils
 import metnum
 import math
 
@@ -51,10 +50,6 @@ class ModeloPrecioV2(ModeloPrecioAbstract):
 
 
     def segmentar(self, segmentos):
-        # idea: dividir la ciudad en norte y sur
-        # idea: en vez de segmentar a priori con categorias fijas, usar las propiedades mas cercanas en cuando a lat y lng para entrenar el modelo
-        # lat y lng son datos que solo tiene la mitad del dataset. podemos quizas tomarlo en cuenta en el modelo con un peso que haga que influya pero poco
-        # agrupar los tipos de propiedades similares que tienen pocas instancias??
         self.segmentos = segmentos
         self.grouped = self.df.groupby(segmentos, dropna=False)
 
@@ -72,12 +67,6 @@ class ModeloPrecioV2(ModeloPrecioAbstract):
     def fit_model(self, gName, group):
         self.feature_engeneering(group)
         self.clean(group)
-        #covarianzasConPrecio = utils.covarianzas_con_precio(group.values)
-        #normalizado = utils.normalize_columns(group.values)
-        #sinPrecio = normalizado[:, :-1] @ np.diag(covarianzasConPrecio)
-        #self.covarianzas[gName] = covarianzasConPrecio
-        #sinPrecio = group.drop('precio', axis=1).values
-        #precios = normalizado[:, -1].reshape(-1, 1)
         sinPrecio = np.c_[group[self.columnas_piolas].values, np.ones(group.values.shape[0])] if self.termino_independiente else group[self.columnas_piolas].values
         precios = group['precio'].values.reshape(-1, 1)
         self.linear_regressor_segmentos[gName] = self.linear_regressor()
@@ -97,9 +86,9 @@ class ModeloPrecioV2(ModeloPrecioAbstract):
                     categoriasNoNaN = [self.segmentos[i] for i, x in enumerate(gName) if type(x) is str]
                     newGrouped = self.df.groupby(categoriasNoNaN)
                     
-                    for gName2, group2 in newGrouped:  # esto es fittear adentro de predict, sorry not sorry
+                    for gName2, group2 in newGrouped:
 
-                        gName2 = (gName2,) if type(gName2) is str else gName2 # (que vergaaaa)
+                        gName2 = (gName2,) if type(gName2) is str else gName2
                         self.fit_model(gName2, group2)
 
                 gName = nameNoNAN
@@ -109,8 +98,6 @@ class ModeloPrecioV2(ModeloPrecioAbstract):
 
 
             gName = gName if gName in self.linear_regressor_segmentos else math.nan
-            #normalizado = utils.normalize_columns(grouped.values)
-            #sinPrecio = normalizado[:, :-1] @ np.diag(self.covariazas[gName])
             sinPrecio = np.c_[group[self.columnas_piolas].values, np.ones(group.values.shape[0])] if self.termino_independiente else group[self.columnas_piolas].values
             group["precio"] = self.linear_regressor_segmentos[gName].predict(sinPrecio)
             result.append(group)
@@ -194,7 +181,7 @@ class Segmentado(ModeloPrecioAbstract):
         for name, group in self.df_predict_grouped:
             fit_df = self.get_segment(name)
 
-            mp = ModeloPrecioMetrosCuadrados(fit_df, self.picked_columns)
+            mp = SinSegmentar(fit_df, self.picked_columns)
             df_predicted = mp.run(group, feature_engineering=True)
 
             result.append(df_predicted)
