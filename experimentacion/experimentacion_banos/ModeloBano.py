@@ -130,10 +130,6 @@ class ModeloV2(ModeloBanoAbstract):
 
 
     def segmentar(self, segmentos):
-        # idea: dividir la ciudad en norte y sur
-        # idea: en vez de segmentar a priori con categorias fijas, usar las propiedades mas cercanas en cuando a lat y lng para entrenar el modelo
-        # lat y lng son datos que solo tiene la mitad del dataset. podemos quizas tomarlo en cuenta en el modelo con un peso que haga que influya pero poco
-        # agrupar los tipos de propiedades similares que tienen pocas instancias??
         self.segmentos = segmentos
         self.grouped = self.df.groupby(segmentos, dropna=False)
 
@@ -169,9 +165,9 @@ class ModeloV2(ModeloBanoAbstract):
                     categoriasNoNaN = [self.segmentos[i] for i, x in enumerate(gName) if type(x) is str]
                     newGrouped = self.df.groupby(categoriasNoNaN)
                     
-                    for gName2, group2 in newGrouped:  # esto es fittear adentro de predict, sorry not sorry
+                    for gName2, group2 in newGrouped:
 
-                        gName2 = (gName2,) if type(gName2) is str else gName2 # (que vergaaaa)
+                        gName2 = (gName2,) if type(gName2) is str else gName2
                         self.fit_model(gName2, group2)
 
                 gName = nameNoNAN
