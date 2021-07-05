@@ -164,7 +164,6 @@ class SinSegmentar(ModeloPrecioAbstract):
     def get_test_df(self):
         return self.df_predict
 
-
 class Segmentado(ModeloPrecioAbstract):
     def run(self, df_predict, segmentos) -> DataFrame:
         self.segmentos = segmentos

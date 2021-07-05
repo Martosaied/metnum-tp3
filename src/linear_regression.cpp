@@ -1,5 +1,4 @@
 #include <algorithm>
-//#include <chrono>
 #include <pybind11/pybind11.h>
 #include <iostream>
 #include <exception>
@@ -14,7 +13,6 @@ LinearRegression::LinearRegression()
 
 void LinearRegression::fit(Matrix X, Matrix y)
 {
-    // Aplicar LDLT para ver si va mas rapido usando cholesovbksy
     _solucion = (X.transpose() * X).completeOrthogonalDecomposition().solve(X.transpose() * y);
 }
 
