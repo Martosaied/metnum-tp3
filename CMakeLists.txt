@@ -43,7 +43,7 @@ set(CMAKE_INSTALL_PREFIX
 
 message(CMAKE_INSTALL_PREFIX = "${CMAKE_INSTALL_PREFIX}")
 
-install(TARGETS metnum DESTINATION ${CMAKE_INSTALL_PREFIX}/notebooks)
+install(TARGETS metnum DESTINATION ${CMAKE_INSTALL_PREFIX}/experimentacion)
 
 # # Crear un binario para testing manteniendo las dependencias de python por separado
 # add_executable(tp2

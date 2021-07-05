@@ -208,7 +208,7 @@ class Segmentado(ModeloPrecioAbstract):
     def get_df(self):
         return self.df.loc[self.df_predict.index]
 
-class ModeloPrecioV2FeatEng(ModeloPrecioV2):
+class ModeloPrecioV2FeatEng(SegmentadoV2):
     def __init__(self, df, seguro_buenaZona):
         self.seguro, self.buenaZona = seguro_buenaZona
         piolas = ["escuelascercanas","piscina","usosmultiples","banos","habitaciones","metroscubiertos"]
