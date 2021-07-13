@@ -1,0 +1,130 @@
+{
+    "RMSE": {
+        "centroscomercialescercanos-escuelascercanas-usosmultiples-banos-habitaciones-antiguedad-precio-metrostotales-garages": [
+            60.64886964,
+            0.12343243,
+            0.61814611,
+            45.02840209
+        ],
+        "centroscomercialescercanos-escuelascercanas-piscina-usosmultiples-banos-habitaciones-antiguedad-precio-metrostotales-garages": [
+            60.64970525,
+            0.12346659,
+            0.61815622,
+            45.02418386
+        ],
+        "centroscomercialescercanos-escuelascercanas-piscina-usosmultiples-banos-habitaciones-antiguedad-precio-metrostotales": [
+            60.65117244,
+            0.12340135,
+            0.61812716,
+            45.00941604
+        ],
+        "centroscomercialescercanos-escuelascercanas-usosmultiples-banos-habitaciones-antiguedad-precio-metrostotales": [
+            60.65149229,
+            0.12337632,
+            0.61814992,
+            45.01457711
+        ],
+        "centroscomercialescercanos-piscina-usosmultiples-banos-habitaciones-antiguedad-precio-metrostotales-garages": [
+            60.65294064,
+            0.12339917,
+            0.6181376,
+            45.02201252
+        ]
+    },
+    "RMSLE": {
+        "centroscomercialescercanos-usosmultiples-banos-habitaciones-precio-metrostotales": [
+            60.70934556,
+            0.12288046,
+            0.61742218,
+            44.96342734
+        ],
+        "centroscomercialescercanos-piscina-usosmultiples-banos-habitaciones-precio-metrostotales": [
+            60.70782165,
+            0.12291802,
+            0.6174506,
+            44.95666182
+        ],
+        "centroscomercialescercanos-usosmultiples-banos-habitaciones-precio-metrostotales-garages": [
+            60.70821664,
+            0.12292613,
+            0.61743983,
+            44.97419898
+        ],
+        "centroscomercialescercanos-escuelascercanas-usosmultiples-banos-habitaciones-precio-metrostotales": [
+            60.70243665,
+            0.12296219,
+            0.61750405,
+            44.96803736
+        ],
+        "centroscomercialescercanos-piscina-usosmultiples-banos-habitaciones-precio-metrostotales-garages": [
+            60.70698314,
+            0.12296737,
+            0.61745047,
+            44.96851217
+        ]
+    },
+    "R2": {
+        "centroscomercialescercanos-escuelascercanas-piscina-usosmultiples-banos-habitaciones-antiguedad-precio-metrostotales-garages": [
+            60.64970525,
+            0.12346659,
+            0.61815622,
+            45.02418386
+        ],
+        "centroscomercialescercanos-escuelascercanas-usosmultiples-banos-habitaciones-antiguedad-precio-metrostotales": [
+            60.65149229,
+            0.12337632,
+            0.61814992,
+            45.01457711
+        ],
+        "centroscomercialescercanos-escuelascercanas-usosmultiples-banos-habitaciones-antiguedad-precio-metrostotales-garages": [
+            60.64886964,
+            0.12343243,
+            0.61814611,
+            45.02840209
+        ],
+        "centroscomercialescercanos-piscina-usosmultiples-banos-habitaciones-antiguedad-precio-metrostotales-garages": [
+            60.65294064,
+            0.12339917,
+            0.6181376,
+            45.02201252
+        ],
+        "centroscomercialescercanos-escuelascercanas-piscina-usosmultiples-banos-habitaciones-antiguedad-precio-metrostotales": [
+            60.65117244,
+            0.12340135,
+            0.61812716,
+            45.00941604
+        ]
+    },
+    "MAE": {
+        "centroscomercialescercanos-piscina-usosmultiples-banos-habitaciones-precio-metrostotales": [
+            60.70782165,
+            0.12291802,
+            0.6174506,
+            44.95666182
+        ],
+        "centroscomercialescercanos-escuelascercanas-piscina-usosmultiples-banos-habitaciones-precio-metrostotales": [
+            60.70149296,
+            0.12301412,
+            0.61751183,
+            44.96127525
+        ],
+        "centroscomercialescercanos-usosmultiples-banos-habitaciones-precio-metrostotales": [
+            60.70934556,
+            0.12288046,
+            0.61742218,
+            44.96342734
+        ],
+        "centroscomercialescercanos-escuelascercanas-usosmultiples-banos-habitaciones-precio-metrostotales": [
+            60.70243665,
+            0.12296219,
+            0.61750405,
+            44.96803736
+        ],
+        "centroscomercialescercanos-piscina-usosmultiples-banos-habitaciones-precio-metrostotales-garages": [
+            60.70698314,
+            0.12296737,
+            0.61745047,
+            44.96851217
+        ]
+    }
+}

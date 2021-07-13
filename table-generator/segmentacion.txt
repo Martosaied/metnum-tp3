@@ -1,0 +1,8 @@
+ &          RMSE &     RMSLE &       R2 &           MAE
+tipodepropiedad                         &  1.527019e+06 &  0.346924 &  0.496725 &  9.943889e+05
+tipodepropiedad, gimnasio, piscina      &  1.523071e+06 &  0.356361 &  0.499334 &  987949.04177
+tipodepropiedad, provincia              &  1.772121e+06 &  1.184816 &  0.267019 &  8.699140e+05
+piscina, usosmultiples                  &  1.689459e+06 &  0.390617 &  0.383957 &  1.143458e+06
+tipodepropiedad, piscina, usosmultiples &  1.524886e+06 &  0.409823 &  0.498140 &  9.913702e+05
+tipodepropiedad, piscina, ciudad &  1.656030e+06 &  3.016046 &  0.39573 &  814186.942536
+tipodepropiedad, piscina, provincia &  4.123287e+06 &  1.447383 & -8.885433 &  883677.6675

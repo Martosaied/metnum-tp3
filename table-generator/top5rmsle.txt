@@ -1,0 +1,6 @@
+ &        RMSE &     RMSLE &        R2 &         MAE
+escuelascercanas-piscina-usosmultiples-banos-habitaciones-metroscubiertos           &  1692928.76 &  0.390311 &  0.381443 &  1146090.20
+escuelascercanas-usosmultiples-banos-habitaciones-metroscubiertos                   &  1693766.46 &  0.391217 &  0.380821 &  1146508.82
+piscina-usosmultiples-banos-habitaciones-metroscubiertos                            &  1692901.96 &  0.391281 &  0.381440 &  1146144.91
+usosmultiples-banos-habitaciones-metroscubiertos                                    &  1693707.05 &  0.391817 &  0.380868 &  1146473.00
+centroscomercialescercanos-piscina-usosmultiples-banos-habitaciones-metroscubiertos &  1691735.05 &  0.393387 &  0.382297 &  1145635.53

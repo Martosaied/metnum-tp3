@@ -1,0 +1,6 @@
+ &        RMSE &     RMSLE &        R2 &         MAE
+centroscomercialescercanos-escuelascercanas-piscina-usosmultiples-banos-habitaciones-antiguedad-metroscubiertos-metrostotales-garages &  1658959.43 &  0.506633 &  0.406021 &  1131766.19
+centroscomercialescercanos-escuelascercanas-usosmultiples-banos-habitaciones-antiguedad-metroscubiertos-metrostotales-garages         &  1659705.90 &  0.510375 &  0.405462 &  1132437.22
+escuelascercanas-piscina-usosmultiples-banos-habitaciones-antiguedad-metroscubiertos-metrostotales-garages                            &  1662348.40 &  0.478815 &  0.403573 &  1134449.21
+centroscomercialescercanos-piscina-usosmultiples-banos-habitaciones-antiguedad-metroscubiertos-metrostotales-garages                  &  1662378.34 &  0.487568 &  0.403552 &  1134698.92
+piscina-usosmultiples-banos-habitaciones-antiguedad-metroscubiertos-metrostotales-garages                                             &  1662781.54 &  0.481437 &  0.403278 &  1134927.43
