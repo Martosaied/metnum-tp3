@@ -1,0 +1,7 @@
+        &        RMSE &     RMSLE &        R2 &         MAE  
+centroscomercialescercanos-usosmultiples-banos-habitaciones-precio-metrostotales & 60.70934556 &  0.12288046 &  0.61742218 &  44.96342734
+centroscomercialescercanos-piscina-usosmultiples-banos-habitaciones-precio-metrostotales & 60.70782165 &  0.12291802 &  0.6174506 &  44.95666182
+centroscomercialescercanos-usosmultiples-banos-habitaciones-precio-metrostotales-garages & 60.70821664 &  0.12292613 &  0.61743983 &  44.97419898
+centroscomercialescercanos-escuelascercanas-usosmultiples-banos-habitaciones-precio-metrostotales & 60.70243665 &  0.12296219 &  0.61750405 &  44.96803736
+centroscomercialescercanos-piscina-usosmultiples-banos-habitaciones-precio-metrostotales-garages & 60.70698314 &  0.12296737 &  0.61745047 &  44.96851217
+        
