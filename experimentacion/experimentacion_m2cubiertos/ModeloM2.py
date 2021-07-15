@@ -145,6 +145,7 @@ class ModeloV2(ModeloM2Abstract):
 
 
     def fit_model(self, gName, group):
+        self.feature_engeneering(group)
         self.clean(group)
         metroscubiertos = np.c_[group[self.columnas_piolas].values, np.ones(group.values.shape[0])] if self.termino_independiente else group[self.columnas_piolas].values
         metroscubiertoss = group['metroscubiertos'].values.reshape(-1, 1)
@@ -172,6 +173,7 @@ class ModeloV2(ModeloM2Abstract):
 
                 gName = nameNoNAN
 
+            self.feature_engeneering(group)
             self.clean(group, False)
 
 
@@ -191,3 +193,32 @@ class ModeloV2(ModeloM2Abstract):
 
     def get_df(self):
         return self.clean_df
+
+
+class ModeloV2FeatEng(ModeloV2):
+    def __init__(self, df, feature_eng):
+        self.pileta, self.garage, self.espacioso = feature_eng
+        piolas = ["centroscomercialescercanos","usosmultiples","banos","habitaciones","precio","metrostotales"]
+        if self.pileta:
+            piolas.append('piscina efectiva')
+        if self.garage:
+            piolas.append('garage efectivo')
+        if self.espacioso:
+            piolas.append('espacioso')
+        super(ModeloV2FeatEng, self).__init__(df, piolas)
+
+
+    def feature_engeneering(self, df: DataFrame):
+        if self.pileta:
+            df['piscina efectiva'] = ((self.df['piscina'] > 0) & (
+                self.df['tipodepropiedad'] == 'Casa'))
+            df['piscina efectiva'] = df['piscina efectiva'].astype(int)
+        if self.garage:
+            df['garage efectivo'] = (self.df['garage'] > 0) & (
+                self.df['tipodepropiedad'] in ['Casa','Casa en condominio','Casa uso de suelo','Quinta Vacacional','Rancho'])
+            df['garage efectivo'] = df['garage efectivo'].astype(int)
+        if self.espacioso:
+            df['espacioso'] = ('amplio' in self.df['descripcion']) | (
+                'espacioso' in self.df['descripcion'])
+            df['espacioso'] = df['espacioso'].astype(int)
+            
