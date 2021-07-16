@@ -9,5 +9,9 @@ PYBIND11_MODULE(metnum, m) {
     py::class_<LinearRegression>(m, "LinearRegression")
         .def(py::init<>())
         .def("fit", &LinearRegression::fit)
+        .def("fitLDLT", &LinearRegression::fitLDLT)
+        .def("fitLLT", &LinearRegression::fitLLT)
+        .def("fitHouseholderQR", &LinearRegression::fitHouseholderQR)
+        .def("fitFullPivHouseholderQR", &LinearRegression::fitFullPivHouseholderQR)
         .def("predict", &LinearRegression::predict);
 }

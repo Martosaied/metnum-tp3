@@ -1,0 +1,8 @@
+{
+    "completeOrthogonalDecomposition": {"escuelascercanas-piscina-usosmultiples-banos-habitaciones-metroscubiertos": [1.69295772e+06, 3.90434165e-01, 3.81395813e-01, 1.14611925e+06]},
+    "partialPivLu": {"escuelascercanas-piscina-usosmultiples-banos-habitaciones-metroscubiertos": [1.69284970e+06, 3.90317701e-01, 3.81458488e-01, 1.14610415e+06]},
+    "llt": {"escuelascercanas-piscina-usosmultiples-banos-habitaciones-metroscubiertos": [1.69294761e+06, 3.91053674e-01, 3.81411736e-01, 1.14611588e+06]},
+    "ldlt": {"escuelascercanas-piscina-usosmultiples-banos-habitaciones-metroscubiertos": [1.69295770e+06, 3.91063618e-01, 3.81412848e-01, 1.14611146e+06]},
+    "HouseholderQR": {"escuelascercanas-piscina-usosmultiples-banos-habitaciones-metroscubiertos": [1.69295445e+06, 3.90362116e-01, 3.81357333e-01, 1.14610789e+06]},
+    "FullPivHouseholderQR" : {"escuelascercanas-piscina-usosmultiples-banos-habitaciones-metroscubiertos": [1.69290944e+06, 3.90355626e-01, 3.81419701e-01, 1.14610878e+06]}
+}

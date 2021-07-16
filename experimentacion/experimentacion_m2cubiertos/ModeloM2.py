@@ -32,11 +32,13 @@ class ModeloM2(ModeloM2Abstract):
 
     def clean(self):
         self.df = self.df[self.picked_columns + ['metroscubiertos']]
-        self.df_predict = self.df_predict[self.picked_columns + ['metroscubiertos']]
-        for columna in self.picked_columns + ['metroscubiertos']:
-            self.df[columna].fillna(2, inplace=True)
-            if not columna == 'metroscubiertos':
-                self.df_predict[columna].fillna(2, inplace=True)
+        self.df_predict = self.df_predict[self.picked_columns]
+        for columna in self.picked_columns:
+            mean = self.df[columna].mean()
+            mean_pr = self.df_predict[columna].mean()
+            mean = mean if not math.isnan(mean) else 0
+            self.df[columna].fillna(mean, inplace=True)
+            self.df_predict[columna].fillna(mean_pr, inplace=True)
 
     def fit(self):
         X = self.df.drop('metroscubiertos', axis=1).values
@@ -210,12 +212,12 @@ class ModeloV2FeatEng(ModeloV2):
 
     def feature_engeneering(self, df: DataFrame):
         if self.pileta:
-            df['piscina efectiva'] = ((self.df['piscina'] > 0) & (
-                self.df['tipodepropiedad'] == 'Casa'))
+            df['piscina efectiva'] = ((self.df['piscina'] > 0) & ((self.df['tipodepropiedad'] == 'Casa') | (self.df['tipodepropiedad'] == 'Casa en condominio') | (self.df['tipodepropiedad'] == 'Casa uso de suelo') | (self.df['tipodepropiedad'] == 'Quinta Vacacional') | (self.df['tipodepropiedad'] == 'Rancho')))
+            df['piscina efectiva'] = df['piscina efectiva'].fillna(0)
             df['piscina efectiva'] = df['piscina efectiva'].astype(int)
         if self.garage:
-            df['garage efectivo'] = (self.df['garage'] > 0) & (
-                self.df['tipodepropiedad'] in ['Casa','Casa en condominio','Casa uso de suelo','Quinta Vacacional','Rancho'])
+            df['garage efectivo'] = ((self.df['garages'] > 0) & ((self.df['tipodepropiedad'] == 'Casa') | (self.df['tipodepropiedad'] == 'Casa en condominio') | (self.df['tipodepropiedad'] == 'Casa uso de suelo') | (self.df['tipodepropiedad'] == 'Quinta Vacacional') | (self.df['tipodepropiedad'] == 'Rancho')))
+            df['garage efectivo'] = df['garage efectivo'].fillna(0)
             df['garage efectivo'] = df['garage efectivo'].astype(int)
         if self.espacioso:
             df['espacioso'] = ('amplio' in self.df['descripcion']) | (
